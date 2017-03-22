@@ -1,2 +1,4 @@
 # HexagonProject
-un bel gioco
+-gioco bello
+-come siavvia: doppio click
+-regole dei giochi
