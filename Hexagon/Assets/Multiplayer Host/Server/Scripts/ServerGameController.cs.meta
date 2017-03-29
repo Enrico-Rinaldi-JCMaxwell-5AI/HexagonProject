@@ -1,0 +1,26 @@
+fileFormatVersion: 2
+guid: 6e7262053b5b9124cb5b001180bce73e
+timeCreated: 1482344653
+licenseType: Free
+MonoImporter:
+  serializedVersion: 2
+  defaultReferences:
+  - ball: {fileID: 1926825978344080, guid: 9f5ff5be3b1507b449b2ab49e76585e1, type: 2}
+  - navPrefab: {fileID: 1362117165169994, guid: cf996874a832e6d41b8c9b5526bd1de8,
+      type: 2}
+  - SBomb: {fileID: 1468163279435302, guid: 232737995522d8843a30af9f61c4f8c7, type: 2}
+  - DBomb: {fileID: 1956037353861806, guid: b993a2142441e1d4b91d6dae0dfd21c3, type: 2}
+  - Shield: {fileID: 1349441654585478, guid: c899afce32840744bb86f3c01769e0cb, type: 2}
+  - Repulsion: {fileID: 1205506392776044, guid: cef6039e9da99cb4a93b70ae626923e9,
+      type: 2}
+  - Red: {fileID: 2100000, guid: 3bca0e85efef015439e4a29a741ab358, type: 2}
+  - Blue: {fileID: 2100000, guid: 732c60929737c4048a1ca9d7de20b021, type: 2}
+  - Green: {fileID: 2100000, guid: a5d7d80306b66e54ab461ea2cd636216, type: 2}
+  - LedRed: {fileID: 2100000, guid: ef4011a11ec9d19498bb199670899e56, type: 2}
+  - LedBlue: {fileID: 2100000, guid: df4fc2e6036fbe84984a49df82d24120, type: 2}
+  - LedOff: {fileID: 2100000, guid: fa57997db35431d419e1bfc05f0480fa, type: 2}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
