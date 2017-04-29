@@ -17,7 +17,7 @@ class PacketSize
         }
         if (header[0] == 0x00 && header[1] == 0x02)
         {
-            return 0;
+            return 16;
         }
         if (header[0] == 0x00 && header[1] == 0x03)
         {

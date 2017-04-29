@@ -62,9 +62,11 @@ public class ClientNManager : MonoBehaviour {
             }
             if (command[0] == 0x00 && command[1] == 0x02)
             {
-                model.usernameAk = false;
-                GameObject.Find("Main Camera").GetComponent<MenuGUI>().message = true;
-                GameObject.Find("Main Camera").GetComponent<MenuGUI>().messageText = "Username error. This username is already used. Pick another one";
+                byte[] username = new byte[16];
+                Debug.Log(command.Length);
+                System.Array.Copy(command, 2, username, 0, 16);
+                model.username = PacketSize.decomposeString(Encoding.ASCII.GetString(username));
+                model.usernameAk = true;
             }
             if (command[0] == 0x00 && command[1] == 0x03)
             {
@@ -257,10 +259,7 @@ public class ClientNManager : MonoBehaviour {
     public void softDisconnection()
     {
         client.disconnect();
-        client = null;
-        model.isGameStarted = false;
-        model.usernameAk = false;
-        model.resetClientData();
+        Destroy(gameObject);
     }
 
     public void sendMovement(float value)

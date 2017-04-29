@@ -14,7 +14,7 @@ public class InputManager : MonoBehaviour {
 
     public int numberOfPlayer()
     {
-        int num=2;
+        int num=3;
         if (Joys[2] != -1)
         {
             num = 3;

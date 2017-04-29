@@ -17,7 +17,7 @@ public class ServerGameModel : MonoBehaviour {
 
     void Start()
     {
-        startBalls = 60;
+        startBalls = 1;
         controller = GetComponent<ServerGameController>();
         startingVectorNavs = new Vector3[4];
         navRots = new Vector3[4];

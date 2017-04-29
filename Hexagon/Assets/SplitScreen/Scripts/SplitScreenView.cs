@@ -9,6 +9,10 @@ public class SplitScreenView : MonoBehaviour {
     public Texture2D endGameBG;
     public Texture2D outTexture;
     public Texture2D blue;
+    public Texture page1;
+    public Texture page2;
+    public Texture page3;
+    public GUIStyle invisibleButtons;
     public bool P1;
     public bool P2;
     public bool P3;
@@ -19,8 +23,17 @@ public class SplitScreenView : MonoBehaviour {
     public bool paused = false;
     public int[] joyNums;
     public bool hint;
+    public int hintpage= 1;
     Texture2D bg;
     public GUIStyle textStyle;
+    public GUIStyle outTextStyle;
+    public Texture2D graybg;
+    public GUIStyle endGameTextStyle;
+    public GUIStyle restartButton;
+    public GUIStyle homeButton;
+    public GUIStyle optionButton;
+    public GUIStyle resumeButton;
+    public GUIStyle countdown;
 
     // Use this for initialization
     void Start () {
@@ -33,7 +46,7 @@ public class SplitScreenView : MonoBehaviour {
         joyNums = mainCamera.GetComponent<InputManager>().Joys;
         gameController = GetComponent<GameController>();
         endGameBG = new Texture2D(1, 1);
-        endGameBG.SetPixel(0, 0, new Color(0.52f, 0.9f, 1f, 0.66f));
+        endGameBG.SetPixel(0, 0, new Color(0.11f, 0.11f, 0.12f, 1));
         endGameBG.Apply();
         bg = new Texture2D(1, 1);
         bg.SetPixel(0, 0, new Color(0f, 0f, 0f, 1f));
@@ -42,7 +55,7 @@ public class SplitScreenView : MonoBehaviour {
         blue.SetPixel(0, 0, new Color(0f, 0f, 1f, 1f));
         blue.Apply();
         outTexture = new Texture2D(1, 1);
-        outTexture.SetPixel(0, 0, new Color(1f, 0, 0, 1f));
+        outTexture.SetPixel(0, 0, new Color(0f, 0, 0, 1f));
         outTexture.Apply();
         P1 = true;
         P2 = true;
@@ -50,7 +63,11 @@ public class SplitScreenView : MonoBehaviour {
             P3 = true;
         if (mainCamera.GetComponent<InputManager>().numberOfPlayer() == 4)
             P4 = true;
-
+        outTextStyle = new GUIStyle();
+        outTextStyle.fontSize = (int)Screen.width/10;
+        outTextStyle.normal.textColor = new Color(1f, 1f, 1f, 1f);
+        countdown.fontSize = (int)Screen.width / 5;
+        countdown.normal.textColor = new Color(1f, 1f, 1f, 1f);
     }
 
     // Update is called once per frame
@@ -64,11 +81,54 @@ public class SplitScreenView : MonoBehaviour {
     {
         if (hint)
         {
-            if (GUI.Button(new Rect(100, 100, 100, 100), "Proceed"))
+            switch(hintpage)
             {
-                hint = false;
-                Time.timeScale = 1;
+                case 1:
+                    {
+                        GUI.DrawTexture(new Rect(Screen.width / 2 - 300, Screen.height / 2 - 225, 600, 450), page1);
+                        if(GUI.Button(new Rect(Screen.width / 2 +95, Screen.height / 2 +130, 80, 80), "",invisibleButtons))
+                        {
+                            hintpage = 2;
+                        }
+                        if (GUI.Button(new Rect(Screen.width / 2 + 190, Screen.height / 2 + 130, 80, 80), "", invisibleButtons))
+                        {
+                            hintpage = 3;
+                        }
+                    }
+                    break;
+                case 2:
+                    {
+                        GUI.DrawTexture(new Rect(Screen.width / 2 - 300, Screen.height / 2 - 225, 600, 450), page2);
+                        if (GUI.Button(new Rect(Screen.width / 2 + 95, Screen.height / 2 + 130, 80, 80), "", invisibleButtons))
+                        {
+                            hintpage = 3;
+                        }
+                        if (GUI.Button(new Rect(Screen.width / 2 - 175, Screen.height / 2 + 130, 80, 80), "",invisibleButtons))
+                        {
+                            hintpage = 1;
+                        }
+                    }
+                    break;
+                case 3:
+                    {
+                        GUI.DrawTexture(new Rect(Screen.width / 2 - 300, Screen.height / 2 - 225, 600, 450), page3);
+                        if (GUI.Button(new Rect(Screen.width / 2 - 270, Screen.height / 2 + 130, 80, 80), "",invisibleButtons))
+                        {
+                            hintpage = 1;
+                        }
+                        if (GUI.Button(new Rect(Screen.width / 2 - 175, Screen.height / 2 + 130, 80, 80), "", invisibleButtons))
+                        {
+                            hintpage = 2;
+                        }
+                        if (GUI.Button(new Rect(Screen.width / 2 + 195, Screen.height / 2 + 132, 80, 80), "", invisibleButtons))
+                        {
+                            hint = false;
+                            Time.timeScale = 1;
+                        }
+                    }
+                    break;
             }
+            
         }
         if (!mainCamera.GetComponent<MenuGUI>().optionMenù)
         {
@@ -76,41 +136,53 @@ public class SplitScreenView : MonoBehaviour {
             {
 
                 if (!P1 && (mainCamera.GetComponent<InputManager>().numberOfPlayer() == 4 || mainCamera.GetComponent<InputManager>().numberOfPlayer() == 3))
+                {
                     GUI.DrawTexture(new Rect(0, 0, Screen.width / 2, Screen.height / 2), outTexture);
+                    GUI.Label(new Rect(Screen.width * 0.14f, Screen.height * 0.15f, Screen.width / 4, Screen.height / 4), "OUT",outTextStyle);
+                }
                 if (!P2 && (mainCamera.GetComponent<InputManager>().numberOfPlayer() == 4 || mainCamera.GetComponent<InputManager>().numberOfPlayer() == 3))
+                {
                     GUI.DrawTexture(new Rect(Screen.width / 2, 0, Screen.width / 2, Screen.height / 2), outTexture);
+                    GUI.Label(new Rect(Screen.width *0.65f, Screen.height*0.15f, Screen.width / 4, Screen.height / 4), "OUT", outTextStyle);
+                }
                 if (!P3 && mainCamera.GetComponent<InputManager>().numberOfPlayer() == 4)
+                {
                     GUI.DrawTexture(new Rect(0, Screen.height / 2, Screen.width / 2, Screen.height / 2), outTexture);
+                    GUI.Label(new Rect(Screen.width * 0.15f, Screen.height * 0.65f, Screen.width / 4, Screen.height / 4), "OUT", outTextStyle);
+                }
                 if (!P4 && mainCamera.GetComponent<InputManager>().numberOfPlayer() == 4)
+                {
                     GUI.DrawTexture(new Rect(Screen.width / 2, Screen.height / 2, Screen.width / 2, Screen.height / 2), outTexture);
+                    GUI.Label(new Rect(Screen.width * 0.65f, Screen.height * 0.65f, Screen.width / 4, Screen.height / 4), "OUT", outTextStyle);
+                }
                 if (!P3 && mainCamera.GetComponent<InputManager>().numberOfPlayer() == 3)
+                {
                     GUI.DrawTexture(new Rect(0, Screen.height / 2, Screen.width, Screen.height / 2), outTexture);
+                    GUI.Label(new Rect(Screen.width * 0.385f, Screen.height * 0.65f, Screen.width / 4, Screen.height / 4), "OUT", outTextStyle);
+                }
             }
             if (paused)
             {
-                if (GUI.Button(new Rect(Screen.width / 2 - 100, Screen.height / 2 - 100, 200, 40), "Resume"))
+                if (GUI.Button(new Rect(Screen.width / 2 -165, Screen.height / 2 - 37, 75, 75), "",resumeButton))
                 {
                     Time.timeScale = 1;
                     paused = false;
                 }
-                if (GUI.Button(new Rect(Screen.width / 2 - 100, Screen.height / 2 - 50, 200, 40), "Options"))
+                if (GUI.Button(new Rect(Screen.width / 2 -80, Screen.height / 2 - 37, 75, 75), "",optionButton))
                 {
                     mainCamera.GetComponent<MenuGUI>().optionMenù = true;
                 }
-                if (GUI.Button(new Rect(Screen.width / 2 - 100, Screen.height / 2, 200, 40), "Restart"))
+                if (GUI.Button(new Rect(Screen.width / 2 +5, Screen.height / 2-37, 75, 75), "",restartButton))
                 {
                     gameController.resetMap();
                     mainCamera.GetComponent<MenuGUI>().instantiateSplit();
                     Time.timeScale = 1;
                     mainCamera.GetComponent<MenuGUI>().setScreenCameras();
                 }
-                if (GUI.Button(new Rect(Screen.width / 2 - 100, Screen.height / 2 + 50, 200, 40), "Main Menu"))
+                if (GUI.Button(new Rect(Screen.width / 2 +90, Screen.height / 2 -37, 75, 75), "",homeButton))
                 {
                     mainCamera.GetComponent<MenuGUI>().isMenuActive = true;
-                    if (!mainCamera.GetComponent<MenuGUI>().logged)
-                    {
-                        mainCamera.GetComponent<MenuGUI>().changeMenuState(1);
-                    }
+                    mainCamera.GetComponent<MenuGUI>().changeMenuState(0);
                     mainCamera.GetComponent<InputManager>().backReset();
                     gameController.resetMap();
                     Time.timeScale = 1;
@@ -120,145 +192,167 @@ public class SplitScreenView : MonoBehaviour {
             }
             else
             {
-                if (!GetComponent<GameController>().isGameFinished)
+                if (!GetComponent<GameController>().isGameFinished && !hint)
                 {
                     
-                    string s0, s1, s2, s3;
-                    if (!P1)
-                        s0 = "OUT";
-                    else
-                        s0 = gameController.playersRemainingBalls[0].ToString();
-                    if (!P2)
-                        s1 = "OUT";
-                    else
-                        s1 = gameController.playersRemainingBalls[1].ToString();
-                    if (!P3)
-                        s2 = "OUT";
-                    else
-                        s2 = gameController.playersRemainingBalls[2].ToString();
-                    if (!P4)
-                        s3 = "OUT";
-                    else
-                        s3 = gameController.playersRemainingBalls[3].ToString();
-                    if (!mainCamera.GetComponent<MenuGUI>().splitMode)
+                    if(gameController.gameTime>-3 && gameController.gameTime < -2)
                     {
-                        GUI.Label(new Rect(Screen.width / 2 - 50, 20, 100, 20), visualizeTime().ToString(),textStyle);
-                        GUI.Label(new Rect(Screen.width / 2 - 50, 50, 100, 20), SplitScreenModel.getMultiplier(gameController.currentTime()).ToString("F2"), textStyle);
-                        if (mainCamera.GetComponent<InputManager>().numberOfPlayer() == 2)
-                        {
-                            GUI.Label(new Rect(Screen.width / 4 - 50, 20, 100, 20), s0);
-                            GUI.DrawTexture(new Rect(Screen.width / 4 - 50, 40, calculatePercent(0)/2, 10), blue);
-                            GUI.Label(new Rect(Screen.width * 0.75f - 50, 20, 100, 20), s1);
-                            GUI.DrawTexture(new Rect(Screen.width * 0.75f, 40, calculatePercent(1)/2, 10), blue);
-                        }
-                        if (mainCamera.GetComponent<InputManager>().numberOfPlayer() == 3)
-                        {
-                            GUI.Label(new Rect(Screen.width / 6 - 50, 20, 100, 20), s0);
-                            GUI.DrawTexture(new Rect(Screen.width / 6 - 50, 40, calculatePercent(0) / 2, 10), blue);
-                            GUI.Label(new Rect(Screen.width / 3 - 50, 20, 100, 20), s1);
-                            GUI.DrawTexture(new Rect(Screen.width / 3 - 50, 40, calculatePercent(1) / 2, 10), blue);
-                            GUI.Label(new Rect(Screen.width * 0.75f - 50, 20, 100, 20), s2);
-                            GUI.DrawTexture(new Rect(Screen.width * 0.75f - 50, 40, calculatePercent(2) / 2, 10), blue);
-                        }
-                        if (mainCamera.GetComponent<InputManager>().numberOfPlayer() == 4)
-                        {
-                            GUI.Label(new Rect(Screen.width / 6 - 50, 20, 100, 20), s0);
-                            GUI.DrawTexture(new Rect(Screen.width / 6 - 50, 40, calculatePercent(0) / 2, 10), blue);
-                            GUI.Label(new Rect(Screen.width / 3 - 50, 20, 100, 20), s1);
-                            GUI.DrawTexture(new Rect(Screen.width / 3 - 50, 40, calculatePercent(1) / 2, 10), blue);
-                            GUI.Label(new Rect(Screen.width * 0.66f - 50, 20, 100, 20), s2);
-                            GUI.DrawTexture(new Rect(Screen.width * 0.66f - 50, 40, calculatePercent(2) / 2, 10), blue);
-                            GUI.Label(new Rect(Screen.width * 0.83f - 50, 20, 100, 20), s3);
-                            GUI.DrawTexture(new Rect(Screen.width * 0.83f - 50, 40, calculatePercent(3) / 2, 10), blue);
-                        }
+                        GUI.Label(new Rect(0, 0, Screen.width, Screen.height), "3" ,countdown);
                     }
-                    else
+                    if (gameController.gameTime > -2 && gameController.gameTime < -1)
                     {
-                        GUI.DrawTexture(new Rect(0, Screen.height / 2 - 1, Screen.width, 2), bg);
-                        if (mainCamera.GetComponent<InputManager>().numberOfPlayer() == 2)
+                        GUI.Label(new Rect(0, 0, Screen.width, Screen.height), "2", countdown);
+                    }
+                    if (gameController.gameTime > -1 && gameController.gameTime < 0)
+                    {
+                        GUI.Label(new Rect(0, 0, Screen.width, Screen.height), "1", countdown);
+                    }
+                    if (gameController.gameTime > 0 && gameController.gameTime < 1)
+                    {
+                        GUI.Label(new Rect(0, 0, Screen.width, Screen.height), "VIA!", countdown);
+                    }
+                    if (gameController.gameTime > 1)
+                    {
+                        string s0, s1, s2, s3;
+                        if (!P1)
+                            s0 = "OUT";
+                        else
+                            s0 = gameController.playersRemainingBalls[0].ToString();
+                        if (!P2)
+                            s1 = "OUT";
+                        else
+                            s1 = gameController.playersRemainingBalls[1].ToString();
+                        if (!P3)
+                            s2 = "OUT";
+                        else
+                            s2 = gameController.playersRemainingBalls[2].ToString();
+                        if (!P4)
+                            s3 = "OUT";
+                        else
+                            s3 = gameController.playersRemainingBalls[3].ToString();
+                        if (!mainCamera.GetComponent<MenuGUI>().splitMode)
                         {
-                            GUI.Label(new Rect(Screen.width / 2 - 50, 5, 100, 20), visualizeTime().ToString(), textStyle);
-                            GUI.Label(new Rect(Screen.width / 2 - 50, 35, 100, 20), SplitScreenModel.getMultiplier(gameController.currentTime()).ToString("F2"), textStyle);
-                            GUI.Label(new Rect(Screen.width / 2 - 50, 20, 100, 20), gameController.playersRemainingBalls[0].ToString());
-                            GUI.DrawTexture(new Rect(Screen.width / 2 - 50, 70, calculatePercent(0) / 2, 10), blue);
-                            GUI.Label(new Rect(Screen.width * 0.75f - 50, Screen.height / 2, 100, 20), gameController.playersRemainingBalls[1].ToString());
-                            GUI.DrawTexture(new Rect(Screen.width *0.75f -50, 70, calculatePercent(1) / 2, 10), blue);
-                        }
-                        if (mainCamera.GetComponent<InputManager>().numberOfPlayer() == 3)
-                        {
-                            GUI.Label(new Rect(Screen.width / 2 - 50, Screen.height / 2, 100, 20), visualizeTime().ToString(), textStyle);
-                            GUI.Label(new Rect(Screen.width / 2 - 50, Screen.height / 2 + 30, 100, 20), SplitScreenModel.getMultiplier(gameController.currentTime()).ToString("F2"), textStyle);
-                            GUI.DrawTexture(new Rect(Screen.width/2-1, 0, 2, Screen.height / 2), bg);
-                            if (P1)
+                            GUI.Label(new Rect(Screen.width / 2 - 50, 20, 100, 20), visualizeTime().ToString(), textStyle);
+                            GUI.Label(new Rect(Screen.width / 2 - 50, 50, 100, 20), SplitScreenModel.getMultiplier(gameController.currentTime()).ToString("F2"), textStyle);
+                            if (mainCamera.GetComponent<InputManager>().numberOfPlayer() == 2)
                             {
-                                GUI.Label(new Rect(Screen.width / 4 - 50, 10, 100, 20), gameController.playersRemainingBalls[0].ToString());
+                                GUI.Label(new Rect(Screen.width / 4 - 50, 20, 100, 20), s0);
                                 GUI.DrawTexture(new Rect(Screen.width / 4 - 50, 40, calculatePercent(0) / 2, 10), blue);
+                                GUI.Label(new Rect(Screen.width * 0.75f - 50, 20, 100, 20), s1);
+                                GUI.DrawTexture(new Rect(Screen.width * 0.75f, 40, calculatePercent(1) / 2, 10), blue);
                             }
-                            if (P2)
+                            if (mainCamera.GetComponent<InputManager>().numberOfPlayer() == 3)
                             {
-                                GUI.Label(new Rect(Screen.width * 0.75f - 50, 10, 100, 20), gameController.playersRemainingBalls[1].ToString());
-                                GUI.DrawTexture(new Rect(Screen.width *0.75f - 50, 40, calculatePercent(1) / 2, 10), blue);
+                                GUI.Label(new Rect(Screen.width / 6 - 50, 20, 100, 20), s0);
+                                GUI.DrawTexture(new Rect(Screen.width / 6 - 50, 40, calculatePercent(0) / 2, 10), blue);
+                                GUI.Label(new Rect(Screen.width / 3 - 50, 20, 100, 20), s1);
+                                GUI.DrawTexture(new Rect(Screen.width / 3 - 50, 40, calculatePercent(1) / 2, 10), blue);
+                                GUI.Label(new Rect(Screen.width * 0.75f - 50, 20, 100, 20), s2);
+                                GUI.DrawTexture(new Rect(Screen.width * 0.75f - 50, 40, calculatePercent(2) / 2, 10), blue);
                             }
-                            if (P3)
+                            if (mainCamera.GetComponent<InputManager>().numberOfPlayer() == 4)
                             {
-                                GUI.Label(new Rect(Screen.width / 2 - 200, Screen.height / 2, 100, 20), gameController.playersRemainingBalls[2].ToString());
-                                GUI.DrawTexture(new Rect(Screen.width / 2 - 200, Screen.height / 2 + 40, calculatePercent(2) / 2, 10), blue);
+                                GUI.Label(new Rect(Screen.width / 6 - 50, 20, 100, 20), s0);
+                                GUI.DrawTexture(new Rect(Screen.width / 6 - 50, 40, calculatePercent(0) / 2, 10), blue);
+                                GUI.Label(new Rect(Screen.width / 3 - 50, 20, 100, 20), s1);
+                                GUI.DrawTexture(new Rect(Screen.width / 3 - 50, 40, calculatePercent(1) / 2, 10), blue);
+                                GUI.Label(new Rect(Screen.width * 0.66f - 50, 20, 100, 20), s2);
+                                GUI.DrawTexture(new Rect(Screen.width * 0.66f - 50, 40, calculatePercent(2) / 2, 10), blue);
+                                GUI.Label(new Rect(Screen.width * 0.83f - 50, 20, 100, 20), s3);
+                                GUI.DrawTexture(new Rect(Screen.width * 0.83f - 50, 40, calculatePercent(3) / 2, 10), blue);
                             }
                         }
-                        if (mainCamera.GetComponent<InputManager>().numberOfPlayer() == 4)
+                        else
                         {
-                            GUI.Label(new Rect(Screen.width / 2 - 50, Screen.height / 2, 100, 20), visualizeTime().ToString(), textStyle);
-                            GUI.Label(new Rect(Screen.width / 2 - 50, Screen.height / 2 + 30, 100, 20), SplitScreenModel.getMultiplier(gameController.currentTime()).ToString("F2"), textStyle);
-                            GUI.DrawTexture(new Rect(Screen.width / 2 - 1, 0, 2, Screen.height), bg);
-                            if (P1)
+                            GUI.DrawTexture(new Rect(0, Screen.height / 2 - 1, Screen.width, 2), bg);
+                            if (mainCamera.GetComponent<InputManager>().numberOfPlayer() == 2)
                             {
-                                GUI.Label(new Rect(Screen.width / 4 - 50, 40, 100, 20), gameController.playersRemainingBalls[0].ToString());
-                                GUI.DrawTexture(new Rect(Screen.width / 4 - 50, 40, calculatePercent(0) / 2, 10), blue);
+                                GUI.Label(new Rect(Screen.width / 2 - 50, 5, 100, 20), visualizeTime().ToString(), textStyle);
+                                GUI.Label(new Rect(Screen.width / 2 - 50, 35, 100, 20), SplitScreenModel.getMultiplier(gameController.currentTime()).ToString("F2"), textStyle);
+                                GUI.Label(new Rect(Screen.width / 2 - 50, 20, 100, 20), gameController.playersRemainingBalls[0].ToString());
+                                GUI.DrawTexture(new Rect(Screen.width / 2 - 50, 70, calculatePercent(0) / 2, 10), blue);
+                                GUI.Label(new Rect(Screen.width * 0.75f - 50, Screen.height / 2, 100, 20), gameController.playersRemainingBalls[1].ToString());
+                                GUI.DrawTexture(new Rect(Screen.width * 0.75f - 50, 70, calculatePercent(1) / 2, 10), blue);
                             }
-                            if (P2)
+                            if (mainCamera.GetComponent<InputManager>().numberOfPlayer() == 3)
                             {
-                                GUI.Label(new Rect(Screen.width * 0.75f - 50, 40, 100, 20), gameController.playersRemainingBalls[1].ToString());
-                                GUI.DrawTexture(new Rect(Screen.width * 0.75f - 50, 40, calculatePercent(1) / 2, 10), blue);
+                                GUI.Label(new Rect(Screen.width / 2 - 50, Screen.height / 2, 100, 20), visualizeTime().ToString(), textStyle);
+                                GUI.Label(new Rect(Screen.width / 2 - 50, Screen.height / 2 + 30, 100, 20), SplitScreenModel.getMultiplier(gameController.currentTime()).ToString("F2"), textStyle);
+                                GUI.DrawTexture(new Rect(Screen.width / 2 - 1, 0, 2, Screen.height / 2), bg);
+                                if (P1)
+                                {
+                                    GUI.Label(new Rect(Screen.width / 4 - 50, 10, 100, 20), gameController.playersRemainingBalls[0].ToString());
+                                    GUI.DrawTexture(new Rect(Screen.width / 4 - 50, 40, calculatePercent(0) / 2, 10), blue);
+                                }
+                                if (P2)
+                                {
+                                    GUI.Label(new Rect(Screen.width * 0.75f - 50, 10, 100, 20), gameController.playersRemainingBalls[1].ToString());
+                                    GUI.DrawTexture(new Rect(Screen.width * 0.75f - 50, 40, calculatePercent(1) / 2, 10), blue);
+                                }
+                                if (P3)
+                                {
+                                    GUI.Label(new Rect(Screen.width / 2 - 200, Screen.height / 2, 100, 20), gameController.playersRemainingBalls[2].ToString());
+                                    GUI.DrawTexture(new Rect(Screen.width / 2 - 200, Screen.height / 2 + 40, calculatePercent(2) / 2, 10), blue);
+                                }
                             }
-                            if (P3)
+                            if (mainCamera.GetComponent<InputManager>().numberOfPlayer() == 4)
                             {
-                                GUI.Label(new Rect(Screen.width / 4 - 50, Screen.height / 2, 100, 20), gameController.playersRemainingBalls[2].ToString());
-                                GUI.DrawTexture(new Rect(Screen.width / 4 - 50, Screen.height / 2 + 40, calculatePercent(2) / 2, 10), blue);
+                                GUI.Label(new Rect(Screen.width / 2 - 50, Screen.height / 2, 100, 20), visualizeTime().ToString(), textStyle);
+                                GUI.Label(new Rect(Screen.width / 2 - 50, Screen.height / 2 + 30, 100, 20), SplitScreenModel.getMultiplier(gameController.currentTime()).ToString("F2"), textStyle);
+                                GUI.DrawTexture(new Rect(Screen.width / 2 - 1, 0, 2, Screen.height), bg);
+                                if (P1)
+                                {
+                                    GUI.Label(new Rect(Screen.width / 4 - 50, 40, 100, 20), gameController.playersRemainingBalls[0].ToString());
+                                    GUI.DrawTexture(new Rect(Screen.width / 4 - 50, 40, calculatePercent(0) / 2, 10), blue);
+                                }
+                                if (P2)
+                                {
+                                    GUI.Label(new Rect(Screen.width * 0.75f - 50, 40, 100, 20), gameController.playersRemainingBalls[1].ToString());
+                                    GUI.DrawTexture(new Rect(Screen.width * 0.75f - 50, 40, calculatePercent(1) / 2, 10), blue);
+                                }
+                                if (P3)
+                                {
+                                    GUI.Label(new Rect(Screen.width / 4 - 50, Screen.height / 2, 100, 20), gameController.playersRemainingBalls[2].ToString());
+                                    GUI.DrawTexture(new Rect(Screen.width / 4 - 50, Screen.height / 2 + 40, calculatePercent(2) / 2, 10), blue);
+                                }
+                                if (P4)
+                                {
+                                    GUI.Label(new Rect(Screen.width * 0.75f - 50, Screen.height / 2, 100, 20), gameController.playersRemainingBalls[3].ToString());
+                                    GUI.DrawTexture(new Rect(Screen.width * 0.75f - 50, Screen.height / 2 + 40, calculatePercent(2) / 2, 10), blue);
+                                }
                             }
-                            if (P4)
-                            {
-                                GUI.Label(new Rect(Screen.width * 0.75f - 50, Screen.height / 2, 100, 20), gameController.playersRemainingBalls[3].ToString());
-                                GUI.DrawTexture(new Rect(Screen.width *0.75f - 50, Screen.height / 2 + 40, calculatePercent(2) / 2, 10), blue);
-                            }
-                        }
 
+                        }
                     }
                 }
                 else
                 {
-                    if (gameController.currentTime() > gameController.totalGameTime + 1.5)
+                    if (!hint)
                     {
-                        GUI.DrawTexture(new Rect(Screen.width / 2 - 350f, Screen.height / 2 - 250, 700, 500), endGameBG);
-                        string text = "WINNER PLAYER " + (gameController.winner + 1) + " Balls remaining: " + gameController.playersRemainingBalls[gameController.winner] + "\n";
-                        for (int i = gameController.scoreboard.Count - 1; i >= 0; i--)
+                        GUI.DrawTexture(new Rect(0, 0, Screen.width, Screen.height), endGameBG);
+                        string text = "PLAYER  " + (gameController.winner + 1) + " WINS!";// + " Balls remaining: " + gameController.playersRemainingBalls[gameController.winner] + "\n";
+                        /*for (int i = gameController.scoreboard.Count - 1; i >= 0; i--)
                         {
                             text = text + " Player: " + (gameController.scoreboard[i].player + 1) + " Time: " + gameController.scoreboard[i].time + "\n";
-                        }
-                        GUI.Label(new Rect(Screen.width / 2 - 350f, Screen.height / 2 - 250, 700, 450), text);
-                        if (GUI.Button(new Rect(Screen.width / 2 - 350f, Screen.height / 2 + 140, 700, 50), "Restart"))
+                        }*/
+
+                        endGameTextStyle.fontSize = Screen.width / 9;
+                        GUI.Label(new Rect(0, Screen.height / 15, Screen.width, Screen.height/2), text,endGameTextStyle);
+                        endGameTextStyle.fontSize = Screen.width / 18;
+                        GUI.Label(new Rect(0, Screen.height / 3.15f, Screen.width, Screen.height / 2), "With " + gameController.playersRemainingBalls[gameController.winner] + " ball(s)!",endGameTextStyle);
+                        endGameTextStyle.fontSize = Screen.width / 40;
+                        GUI.Label(new Rect(0, Screen.height / 1.8f, Screen.width, Screen.height / 2), "Total game time: " + Mathf.Round(gameController.totalGameTime) + "s\nSpeed multiplier reached: "+System.Math.Round(SplitScreenModel.getMultiplier(gameController.totalGameTime),2)+"x", endGameTextStyle);
+                        if (GUI.Button(new Rect(Screen.width / 2-80, Screen.height / 1.3f, 75, 75), "",restartButton))
                         {
                             gameController.resetMap();
                             mainCamera.GetComponent<MenuGUI>().instantiateSplit();
                             Time.timeScale = 1;
                             mainCamera.GetComponent<MenuGUI>().setScreenCameras();
                         }
-                        if (GUI.Button(new Rect(Screen.width / 2 - 350f, Screen.height / 2 + 200, 700, 50), "Main Menu"))
+                        if (GUI.Button(new Rect(Screen.width / 2 + 5, Screen.height / 1.3f, 75, 75), "",homeButton))
                         {
                             mainCamera.GetComponent<MenuGUI>().isMenuActive = true;
-                            if (!mainCamera.GetComponent<MenuGUI>().logged)
-                            {
-                                mainCamera.GetComponent<MenuGUI>().changeMenuState(1);
-                            }
+                            mainCamera.GetComponent<MenuGUI>().changeMenuState(0);
                             mainCamera.GetComponent<InputManager>().backReset();
                             gameController.resetMap();
                             Time.timeScale = 1;
@@ -377,10 +471,7 @@ public class SplitScreenView : MonoBehaviour {
             if (Input.GetKeyDown("joystick " + joyNums[0] + " button " + InputPreferences.getInput(1, 0)) && endGameSelectedItem == 1)
             {
                 GameObject.Find("Main Camera").GetComponent<MenuGUI>().isMenuActive = true;
-                if (!GameObject.Find("Main Camera").GetComponent<MenuGUI>().logged)
-                {
-                    mainCamera.GetComponent<MenuGUI>().changeMenuState(1);
-                }
+                mainCamera.GetComponent<MenuGUI>().changeMenuState(0);
                 GameObject.Find("Main Camera").GetComponent<InputManager>().backReset();
                 gameController.resetMap();
                 Time.timeScale = 1;
@@ -426,10 +517,7 @@ public class SplitScreenView : MonoBehaviour {
                     case 3:
                         {
                             GameObject.Find("Main Camera").GetComponent<MenuGUI>().isMenuActive = true;
-                            if (!GameObject.Find("Main Camera").GetComponent<MenuGUI>().logged)
-                            {
-                                mainCamera.GetComponent<MenuGUI>().changeMenuState(1);
-                            }
+                            mainCamera.GetComponent<MenuGUI>().changeMenuState(1);
                             GameObject.Find("Main Camera").GetComponent<InputManager>().backReset();
                             gameController.resetMap();
                             Time.timeScale = 1;

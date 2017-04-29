@@ -20,7 +20,7 @@ public class ClientData
 
     public void resetData()
     {
-        balls = 60;
+        balls = 5;
         isAlive = true;
         shieldCoolDown = 0;
         repulsionCoolDown = 0;

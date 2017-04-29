@@ -195,20 +195,22 @@ public class HostServer
         Array.Copy(received, 2, message, 0, received.Length - 2);
         if (header[0] == 0x00 && header[1] == 0x00)     //USERNAME RECEIVED
         {
-            for(int i=0;i<3;i++)
+            string username = PacketSize.decomposeString(Encoding.ASCII.GetString(message));
+            for (int i=0;i<3;i++)
             {
                 if(clientSocketList.Exist(i) && clientSocketList.Get(i).clientData!= null && PacketSize.decomposeString(Encoding.ASCII.GetString(message)).Equals(clientSocketList.Get(i).clientData.username) || PacketSize.decomposeString(Encoding.ASCII.GetString(message)).Equals(ownerData.username))
                 {
                     sendHeader[0] = 0x00;
                     sendHeader[1] = 0x02;
-                    sendData(id, sendHeader, new byte[0],false);
-                    return;
+                    username = PacketSize.decomposeString(Encoding.ASCII.GetString(message)) + "bis";
+                    Debug.Log(username);
+                    sendData(id, sendHeader, Encoding.ASCII.GetBytes(PacketSize.composeString(username)), false);
                 }
             }
             sendHeader[0] = 0x00;
             sendHeader[1] = 0x01;
             sendData(id, sendHeader, new byte[0],false);
-            clientSocketList.Get(id).clientData = new ClientData(PacketSize.decomposeString(Encoding.ASCII.GetString(message)));
+            clientSocketList.Get(id).clientData = new ClientData(username);
             sendHeader[0] = 0x00;
             sendHeader[1] = 0x03;
             //MANDO AL CLIENT APPENA CONNESSO TUTTI I DATI DEGLI ALTRI GIOCATORI
@@ -375,6 +377,7 @@ public class HostServer
         {
             kickClient(0);
         }
+        receiver.Close();
         serverSocket.Close();
         connectionChecker.Stop();
         connectionChecker.Dispose();

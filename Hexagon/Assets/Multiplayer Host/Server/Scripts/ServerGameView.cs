@@ -10,10 +10,11 @@ public class ServerGameView : MonoBehaviour {
     Texture2D bg;
     public Texture2D lobbyTexture;
     Texture2D blueled;
-    public Texture2D playButton;
     public GameObject[] navs;
     public bool serverOption = false;
     public int slidervalue;
+    public bool used;
+    public GUIStyle startButton;
 
     // Use this for initialization
     void Start () {
@@ -29,6 +30,11 @@ public class ServerGameView : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
+        if(nmanager.server==null && used)
+        {
+            GameObject.Find("Main Camera").GetComponent<MenuGUI>().isMenuActive = true;
+            Destroy(gameObject);
+        }
 		if(model.isGameStarted)
         {
             if (navs != null) {
@@ -61,30 +67,12 @@ public class ServerGameView : MonoBehaviour {
 
     void OnGUI()
     {
-        if (nmanager.server == null)
-        {
-            GUI.DrawTexture(new Rect(0, 0, Screen.width, Screen.height), bg, ScaleMode.ScaleAndCrop);
-            model.port = GUI.TextField(new Rect(20, 20, 100, 20), model.port);
-            model.user = GUI.TextField(new Rect(20, 50, 100, 20), model.user);
-            slidervalue = (int)GUI.HorizontalSlider(new Rect(100, 300, 200, 20), slidervalue, 1, 4);
-            model.updatesPerSecond = (int)Mathf.Pow(2, slidervalue - 1) * 8;
-            if (GUI.Button(new Rect(130, 20, 100, 20), "Start"))
-            {
-                if (System.Int32.Parse(model.port) > 0 && System.Int32.Parse(model.port) < 65535 && System.Int32.Parse(model.port) != 80 && System.Int32.Parse(model.port) != 53000 && System.Int32.Parse(model.port) != 52999 && System.Int32.Parse(model.port) != 52998 && !model.user.Equals("") && model.user.Length<=16)
-                {
-                    nmanager.server = new HostServer(System.Int32.Parse(model.port),model);
-                    nmanager.server.ownerData = new ClientData(model.user);
-                }
-            }
-        }
-        else
-        {
             if (!model.isGameStarted)
             {
                 GUI.DrawTexture(new Rect(0, 0, Screen.width, Screen.height), lobbyTexture, ScaleMode.ScaleAndCrop);
                 if(nmanager.canMatchStart())
                 {
-                    if(GUI.Button(new Rect(387, 212, 26, 26), playButton))
+                    if(GUI.Button(new Rect(387, 212, 26, 26), "",startButton))
                     {
                         //START MATCH
                         controller.startGame();
@@ -156,6 +144,6 @@ public class ServerGameView : MonoBehaviour {
                     }
                 }
             }
-        }
+        
     }
 }

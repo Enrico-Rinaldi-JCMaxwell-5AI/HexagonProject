@@ -6,7 +6,7 @@ using UnityEngine;
 public class HostClientView : MonoBehaviour {
     Texture2D bg;
     HostClientController controller;
-    HostClientModel model;
+    public HostClientModel model;
     ClientNManager nmanager;
     public Texture lobby;
     Texture2D blueled;
@@ -14,6 +14,10 @@ public class HostClientView : MonoBehaviour {
     public GameObject auxObject;
     public float gameTime=0;
     public float nextMoveUpdate=0;
+    public bool used=false;
+    public GUIStyle endgameText;
+    public GUIStyle homebutton;
+    public bool isMenuOpen=false;
     
     // Use this for initialization
     void Start () {
@@ -25,10 +29,16 @@ public class HostClientView : MonoBehaviour {
         blueled.SetPixel(0, 0, new Color(0f, 0.25f, 1f, 1));
         blueled.Apply();
         auxObject = (GameObject)Instantiate(auxiliaryMovement, new Vector3(0, 0, 0),Quaternion.identity);
+        endgameText.normal.textColor = new Color(1, 1, 1, 1);
     }
 	
 	// Update is called once per frame
 	void Update () {
+        if (used && nmanager.client == null)
+        {
+            GameObject.Find("Main Camera").GetComponent<MenuGUI>().isMenuActive = true;
+            Destroy(gameObject);
+        }
 		if((Input.GetAxis("Horizontal")!=0 || Input.GetKey((KeyCode)InputPreferences.getKeyBoardInput("A")) || Input.GetKey((KeyCode)InputPreferences.getKeyBoardInput("D"))) && model.isGameStarted && !model.isGameFinished)
         {
             float speed = 12f * Input.GetAxis("Horizontal") * Time.deltaTime;
@@ -80,32 +90,6 @@ public class HostClientView : MonoBehaviour {
 
     private void OnGUI()
     {
-        if (nmanager.client == null)
-        {
-            GUI.DrawTexture(new Rect(0, 0, Screen.width, Screen.height), bg, ScaleMode.ScaleAndCrop);
-            model.remoteIP = GUI.TextField(new Rect(100, 180, 80, 20), model.remoteIP);
-            model.port = GUI.TextField(new Rect(180, 180, 80, 20), model.port);
-            if (GUI.Button(new Rect(180, 100, 80, 20), "Connect") && !model.remoteIP.Equals("") && !model.port.Equals("") && System.Int32.Parse(model.port) > 0 && System.Int32.Parse(model.port) < 65535 && System.Int32.Parse(model.port) != 80 && System.Int32.Parse(model.port) != 53000)
-            {
-                nmanager.client = new HostClient(model.remoteIP, System.Int32.Parse(model.port));
-            }
-            return;
-        }
-        if (!model.usernameAk)
-        {
-            GUI.DrawTexture(new Rect(0, 0, Screen.width, Screen.height), bg, ScaleMode.ScaleAndCrop);
-            model.username = GUI.TextField(new Rect(100, 180, 80, 20), model.username);
-            if (GUI.Button(new Rect(180, 100, 80, 20), "Send") && !model.username.Equals("") && model.username.Length <= 16 && !model.username.Contains(" "))
-            {
-                byte[] header = new byte[2];
-                header[0] = 0x00;
-                header[1] = 0x00;
-                nmanager.client.SendInfo(header, Encoding.ASCII.GetBytes(PacketSize.composeString(model.username)));
-            }
-            return;
-        }
-        else
-        {
             if (!model.isGameStarted)
             {
                 GUI.DrawTexture(new Rect(0, 0, Screen.width, Screen.height), lobby, ScaleMode.ScaleAndCrop);
@@ -162,14 +146,54 @@ public class HostClientView : MonoBehaviour {
                     }
                 }
             }
-        }
+        
         if (model.isGameStarted)
         {
-            for(int i=0;i<4;i++)
+            if (!controller.imAlive() && !model.isGameFinished)
             {
-                if(model.clientData[i]!=null)
+                GUI.DrawTexture(new Rect(0, 0, Screen.width, Screen.height), bg);
+                endgameText.fontSize = Screen.width / 9;
+                GUI.Label(new Rect(0, Screen.height / 40, Screen.width, Screen.height / 2), "GAME OVER", endgameText);
+                endgameText.fontSize = Screen.width / 20;
+                GUI.Label(new Rect(0, Screen.height / 5f, Screen.width, Screen.height / 2), "In attesa che la partita finisca", endgameText);
+                if (GUI.Button(new Rect(Screen.width / 2 - 37, Screen.height / 1.3f, 75, 75), "", homebutton))
                 {
-                    GUI.Label(new Rect(100 * i, 20, 100, 20), model.clientData[i].balls.ToString());
+                    controller.resetMap();
+                    nmanager.softDisconnection();
+                    GameObject.Find("Main Camera").GetComponent<MenuGUI>().isMenuActive = true;
+                }
+            }
+            else
+            {
+                if (model.isGameFinished)
+                {
+                    GUI.DrawTexture(new Rect(0, 0, Screen.width, Screen.height), bg);
+                    endgameText.fontSize = Screen.width / 14;
+                    GUI.Label(new Rect(0, Screen.height / 60, Screen.width, Screen.height / 2), model.clientData[model.winner].username +"\nHA VINTO!", endgameText);
+                    endgameText.fontSize = Screen.width / 40;
+                    GUI.Label(new Rect(0, Screen.height / 3f, Screen.width, Screen.height / 2), "In attesa del proprietario della lobby.", endgameText);
+                    if (GUI.Button(new Rect(Screen.width / 2 - 37, Screen.height / 1.3f, 75, 75), "", homebutton))
+                    {
+
+                        controller.resetMap();
+                        nmanager.softDisconnection();
+                        GameObject.Find("Main Camera").GetComponent<MenuGUI>().isMenuActive = true;
+                    }
+                }
+                else
+                {
+                    if (isMenuOpen)
+                    {
+                        if (GUI.Button(new Rect(Screen.width / 2 - 37, Screen.height / 2 - 37, 75, 75), "", homebutton))
+                            nmanager.softDisconnection();
+                    }
+                    for (int i = 0; i < 4; i++)
+                    {
+                        if (model.clientData[i] != null)
+                        {
+                            GUI.Label(new Rect(100 * i, 20, 100, 20), model.clientData[i].balls.ToString());
+                        }
+                    }
                 }
             }
         }

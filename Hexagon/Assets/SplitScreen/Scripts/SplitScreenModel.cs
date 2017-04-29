@@ -14,7 +14,7 @@ public class SplitScreenModel
     public static float bombExplosionFuse = 5;
     public static float joySensibility = 12f;
     public static int maxStartBalls = 60;
-    public static int preGameSeconds = 2;
+    public static int preGameSeconds = 3;
     public static int changeDirectionBallInterval = 3;
     public static float launchBallMinSpeed = 4.5f;
     public static float launchBallMaxSpeed = 9.5f;

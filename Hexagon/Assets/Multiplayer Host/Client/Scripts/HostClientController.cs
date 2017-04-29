@@ -191,4 +191,12 @@ public class HostClientController : MonoBehaviour {
         changePortState(portdead);
         model.clientData[portdead].isAlive = false;
     }
+
+    public bool imAlive()
+    {
+        if (!model.clientData[model.getMyPort()].isAlive)
+            return false;
+        else
+            return true;
+    }
 }

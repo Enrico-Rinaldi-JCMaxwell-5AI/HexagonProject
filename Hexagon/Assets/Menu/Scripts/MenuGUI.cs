@@ -5,20 +5,20 @@ using UnityEngine;
 public class MenuGUI : MonoBehaviour {
     public bool isMenuActive = true;
     public int menuState = 0;
-    public string username;
-    public string password;
     public bool split = false;
     public Texture JoyBack;
-    public Texture P1;
-    public Texture P2;
-    public Texture P3;
-    public Texture P4;
+    public Texture LobbyBg;
+    public GUIStyle startButton;
+    public Texture2D redLed;
+    public GUIStyle OptionSel;
+    public GUIStyle SplitSel;
+    public GUIStyle MultiSel;
+    public GUIStyle hexFont;
     public Texture2D bg;
     public Object splitGameObject;
     public Object HostGameManager;
     public Object ClientHostGameManager;
-    public bool logged=false;
-    public bool splitMode = false;
+    public bool splitMode = true;
     public bool optionMenù;
     public string width;
     public string height;
@@ -28,12 +28,16 @@ public class MenuGUI : MonoBehaviour {
     public int joychoose;
     public bool enterListening;
     public int buttonNum;
-    public Texture joybg;
     public bool message;
     public string messageText;
     public bool keyBoardChoose=false;
     public bool keyEnterListening = false;
     public string keyButtonName="";
+    public GUIStyle bgMessage;
+    public int port=30000;
+    public string Username;
+    public string IP;
+    public int slidervalue=1;
 
     // Use this for initialization
     void Start () {
@@ -45,10 +49,19 @@ public class MenuGUI : MonoBehaviour {
             PlayerPrefs.SetInt("SHeight", 768);
             PlayerPrefs.SetInt("GHint", 1);
             InputPreferences.setDefault();
+            message = true;
+            messageText = "Benvenuto su Hexagon Project!\nSembra essere la prima volta che giochi.\nTi consigliamo quindi di impostare nelle opzioni i comandi\ne la risoluzione desiderata.\nBuon divertimento!\n\n -Team di Hexagon Project";
         }
+        Texture2D temp = new Texture2D(1, 1);
+        temp.SetPixel(0, 0, new Color(0, 0, 0, 1));
+        temp.Apply();
+        bgMessage.normal.background = temp;
         bg = new Texture2D(1, 1);
         bg.SetPixel(0, 0, new Color(0.11f, 0.11f, 0.12f, 1));
         bg.Apply();
+        redLed = new Texture2D(1, 1);
+        redLed.SetPixel(0, 0, new Color(0f, 0f, 1f, 1));
+        redLed.Apply();
         loadSettings();
     }
 
@@ -87,34 +100,14 @@ public class MenuGUI : MonoBehaviour {
                 messageText = "Input changed successfully!";
             }
         }
-        if (menuState == 1 && isMenuActive && Input.GetKeyDown("joystick button "+InputPreferences.getInput(1,0)) && split && !optionMenù)
-        {
-            changeMenuState(2);
-        }
-        if (menuState==0 && isMenuActive && Input.GetKeyDown("joystick button " + InputPreferences.getInput(1, 0)) && !optionMenù)
-        {
-            changeMenuState(1);
-        }
         if (menuState == 1 && isMenuActive && Input.GetKeyDown("joystick button " + InputPreferences.getInput(1, 1)) && !optionMenù)
         {
             changeMenuState(0);
         }
-        if(menuState == 1 && isMenuActive && Input.GetAxis("Horizontal") == 1 && !optionMenù)
-        {
-            split = true;
-        }
-        if (menuState == 1 && isMenuActive && Input.GetAxis("Horizontal") == -1 && !optionMenù)
-        {
-            split =false;
-        }
         if (menuState == 2 && isMenuActive && Input.GetKeyDown("joystick button " + InputPreferences.getInput(1, 1)) && !optionMenù)
         {
-            changeMenuState(1);
+            changeMenuState(0);
             GetComponent<InputManager>().backReset();
-        }
-        if (menuState == 2 && isMenuActive && Input.GetKeyDown("joystick button " + InputPreferences.getInput(1, 6)) && !optionMenù)
-        {
-            splitMode = !splitMode;
         }
         if (GetComponent<InputManager>().isReady() && Input.GetKeyDown("joystick button " + InputPreferences.getInput(1, 7)) && isMenuActive && menuState == 2 && !optionMenù)
         {
@@ -124,6 +117,17 @@ public class MenuGUI : MonoBehaviour {
             setSavedScreenRes();
             setScreenCameras();
         }
+        if (isMenuActive && menuState == 0)
+        {
+            if (Random.Range(50, 255) > (hexFont.normal.textColor.g*255))
+            {
+                hexFont.normal.textColor = new Color(0, hexFont.normal.textColor.g + 0.01953125f, 0);
+            }
+            else
+            {
+                hexFont.normal.textColor = new Color(0, hexFont.normal.textColor.g - 0.01953125f, 0);
+            }
+        }
 
     }
 
@@ -132,7 +136,7 @@ public class MenuGUI : MonoBehaviour {
         if (optionMenù)
         {
             GUI.DrawTexture(new Rect(0, 0, Screen.width, Screen.height), bg, ScaleMode.ScaleAndCrop);
-            if (GUI.Button(new Rect(700, 0, 100, 20), "Restore Default Settings"))
+            if (GUI.Button(new Rect(600, 0, 200, 30), "Ritorna alle impostazioni iniziali"))
             {
                 PlayerPrefs.SetInt("SWidth", 1024);
                 PlayerPrefs.SetInt("SHeight", 768);
@@ -143,19 +147,15 @@ public class MenuGUI : MonoBehaviour {
                     setSavedScreenRes();
                 loadSettings();
             }
-            if(GUI.Button(new Rect(0,0,50,50),"GS"))
+            if (GUI.Button(new Rect(20, 20, 64, 64), "Comandi"))
             {
                 optionTab = 0;
             }
-            if (GUI.Button(new Rect(0, 50, 50, 50), "Input"))
+            if (GUI.Button(new Rect(94, 20, 64, 64), "Grafica"))
             {
                 optionTab = 1;
             }
-            if (GUI.Button(new Rect(0, 100, 50, 50), "Graphic"))
-            {
-                optionTab = 2;
-            }
-            if (GUI.Button(new Rect(0, Screen.height - 50, Screen.width, 50), "Back"))
+            if (GUI.Button(new Rect(0, Screen.height - 50, Screen.width, 50), "Torna al menù principale"))
             {
                 optionMenù = false;
             }
@@ -163,99 +163,46 @@ public class MenuGUI : MonoBehaviour {
             {
                 case 0:
                     {
-                        inGameHint = GUI.Toggle(new Rect(320, 160, 150, 20), inGameHint, "Enable in game hints"); 
-                    }break;
-                case 1:
-                    {
-                        
-                        if (GUI.Button(new Rect(70, 20, 20, 20), "Key")) keyBoardChoose = true;
-                        if (GUI.Button(new Rect(100, 20, 20, 20), "1"))
+                        GUI.Label(new Rect(25, 104, Screen.width, 50), "1. Seleziona il device di input da configurare");
+                        if (GUI.Button(new Rect(20, 134, 70, 30), "Tastiera")) keyBoardChoose = true;
+                        if (GUI.Button(new Rect(100, 134, 50, 30), "Joy1"))
                         {
                             joychoose = 1;
                             keyBoardChoose = false;
                         }
-                        if (GUI.Button(new Rect(130, 20, 20, 20), "2"))
+                        if (GUI.Button(new Rect(160, 134, 50, 30), "Joy2"))
                         {
                             joychoose = 2;
                             keyBoardChoose = false;
                         }
-                        if (GUI.Button(new Rect(160, 20, 20, 20), "3"))
+                        if (GUI.Button(new Rect(220, 134, 50, 30), "Joy3"))
                         {
                             joychoose = 3;
                             keyBoardChoose = false;
                         }
-                        if (GUI.Button(new Rect(190, 20, 20, 20), "4"))
+                        if (GUI.Button(new Rect(280, 134, 50, 30), "Joy4"))
                         {
                             joychoose = 4;
                             keyBoardChoose = false;
                         }
+                        GUI.Label(new Rect(25, 174, Screen.width, 50), "2. Selezionare successivamente l'azione da configurare, premendo l'azione\ndesiderata qui in basso con il mouse e successivamente con il tasto desiderato.");
                         if (!keyBoardChoose)
                         {
-                            GUI.DrawTexture(new Rect(175, 50, 446, 300), joybg);
-                            if (GUI.Button(new Rect(234, 109, 78, 30), "LB") && joychoose != 0)
-                            {
-                                enterListening = true;
-                                buttonNum = 4;
-                                message = true;
-                                messageText = "Listening for a joystick input";
-                            }
-                            if (GUI.Button(new Rect(482, 109, 78, 30), "RB") && joychoose != 0)
-                            {
-                                enterListening = true;
-                                buttonNum = 5;
-                                message = true;
-                                messageText = "Listening for a joystick input";
-                            }
-                            if (GUI.Button(new Rect(244, 180, 55, 55), "LA") && joychoose != 0)
-                            {
-                                enterListening = true;
-                                buttonNum = 8;
-                                message = true;
-                                messageText = "Listening for a joystick input";
-                            }
-                            if (GUI.Button(new Rect(428, 250, 55, 45), "RA") && joychoose != 0)
-                            {
-                                enterListening = true;
-                                buttonNum = 9;
-                                message = true;
-                                messageText = "Listening for a joystick input";
-                            }
-                            if (GUI.Button(new Rect(342, 192, 21, 15), "Sel") && joychoose != 0)
-                            {
-                                enterListening = true;
-                                buttonNum = 6;
-                                message = true;
-                                messageText = "Listening for a joystick input";
-                            }
-                            if (GUI.Button(new Rect(431, 192, 21, 15), "Ent") && joychoose != 0)
+                            if (GUI.Button(new Rect(20, 224, 50, 30), "Pausa") && joychoose != 0)
                             {
                                 enterListening = true;
                                 buttonNum = 7;
                                 message = true;
                                 messageText = "Listening for a joystick input";
                             }
-                            if (GUI.Button(new Rect(507, 156, 30, 30), "Y") && joychoose != 0)
-                            {
-                                enterListening = true;
-                                buttonNum = 3;
-                                message = true;
-                                messageText = "Listening for a joystick input";
-                            }
-                            if (GUI.Button(new Rect(473, 185, 30, 26), "X") && joychoose != 0)
+                            if (GUI.Button(new Rect(80, 224, 50, 30), "Scudo") && joychoose != 0)
                             {
                                 enterListening = true;
                                 buttonNum = 2;
                                 message = true;
                                 messageText = "Listening for a joystick input";
                             }
-                            if (GUI.Button(new Rect(538, 182, 30, 27), "B") && joychoose != 0)
-                            {
-                                enterListening = true;
-                                buttonNum = 1;
-                                message = true;
-                                messageText = "Listening for a joystick input";
-                            }
-                            if (GUI.Button(new Rect(503, 211, 31, 27), "A") && joychoose != 0)
+                            if (GUI.Button(new Rect(140, 224, 80, 30), "Repulsione") && joychoose != 0)
                             {
                                 enterListening = true;
                                 buttonNum = 0;
@@ -264,36 +211,41 @@ public class MenuGUI : MonoBehaviour {
                             }
                         }else
                         {
-                            if(GUI.Button(new Rect(100,50,20,20),"left"))
+                            if(GUI.Button(new Rect(20,224,60,30),"Sinistra"))
                             {
                                 keyEnterListening = true;
                                 keyButtonName = "A";
                             }
-                            if (GUI.Button(new Rect(130, 50, 20, 20), "right"))
+                            if (GUI.Button(new Rect(90, 224, 50, 30), "Destra"))
                             {
                                 keyEnterListening = true;
                                 keyButtonName = "D";
                             }
-                            if (GUI.Button(new Rect(100, 80, 20, 20), "ab1"))
+                            if (GUI.Button(new Rect(150, 224, 50, 30), "Scudo"))
                             {
                                 keyEnterListening = true;
                                 keyButtonName = "RE";
                             }
-                            if (GUI.Button(new Rect(130, 80, 20, 20), "ab2"))
+                            if (GUI.Button(new Rect(210, 224, 80, 30), "Repulsione"))
                             {
                                 keyEnterListening = true;
                                 keyButtonName = "SH";
                             }
+                            if (GUI.Button(new Rect(300, 224, 50, 30), "Pausa"))
+                            {
+                                keyEnterListening = true;
+                                keyButtonName = "ES";
+                            }
                         }
                     }
                     break;
-                case 2:
+                case 1:
                     {
-                        GUI.Label(new Rect(100, 100, 100, 20), "Resolution");
-                        width = GUI.TextField(new Rect(100, 130, 100, 20), width);
-                        height = GUI.TextField(new Rect(210, 130, 100, 20), height);
-                        fullscreen = GUI.Toggle(new Rect(320, 130, 150, 20), fullscreen, "Fullscreen");
-                        if (GUI.Button(new Rect(100, 160, 100, 50), "Set and save"))
+                        GUI.Label(new Rect(20, 120, 100, 20), "Risoluzione");
+                        width = GUI.TextField(new Rect(20, 150, 100, 20), width);
+                        height = GUI.TextField(new Rect(130, 150, 100, 20), height);
+                        fullscreen = GUI.Toggle(new Rect(240, 150, 150, 20), fullscreen, "Fullscreen");
+                        if (GUI.Button(new Rect(20, 180, 120, 30), "Imposta e salva"))
                         {
                             if (!width.Equals("") && !height.Equals("") && System.Int32.Parse(width) >= 800 && System.Int32.Parse(height) >= 450)
                             {
@@ -320,79 +272,101 @@ public class MenuGUI : MonoBehaviour {
             if (isMenuActive)
             {
                 GUI.DrawTexture(new Rect(0, 0, Screen.width, Screen.height), bg, ScaleMode.ScaleAndCrop);
-                if (GUI.Button(new Rect(0, 430, 100, 20), "Options"))
-                {
-                    optionMenù = true;
-                }
                 switch (menuState)
                 {
                     case 0:
                         {
-                            username = GUI.TextField(new Rect(20, 20, 260, 30), username);
-                            password = GUI.PasswordField(new Rect(20, 70, 260, 30), password, '*');
-                            GUI.Button(new Rect(200, 120, 80, 20), "Login");
-                            if(GUI.Button(new Rect(20, 150, 80, 20), "Host a game"))
+                            GUI.Label(new Rect(0, 0, Screen.width, Screen.height / 2), "Hexagon\nProject", hexFont);
+                            hexFont.fontSize = (int)(Screen.width * 0.075f);
+                            if (GUI.Button(new Rect((Screen.width * 0.58f) - Screen.width * 0.15625f, (Screen.height * 0.85f) - Screen.width * 0.15625f, Screen.width * 0.15625f, Screen.width * 0.15625f), "", OptionSel))
                             {
-                                Instantiate(HostGameManager);
-                                isMenuActive = false;
+                                optionMenù = true;
                             }
-                            if (GUI.Button(new Rect(20, 180, 80, 20), "Enter an hosted game"))
+                            if (GUI.Button(new Rect((Screen.width * 0.81f) - Screen.width * 0.15625f, (Screen.height * 0.85f) - Screen.width * 0.15625f, Screen.width * 0.15625f, Screen.width * 0.15625f), "", MultiSel))
                             {
-                                Instantiate(ClientHostGameManager);
-                                isMenuActive = false;
+                                menuState = 1;
                             }
-                            
-                            if (GUI.Button(new Rect(20, 250, 260, 30), "Play as guest"))
-                            {
-                                changeMenuState(1);
-                            }
-                        }
-                        break;
-                    case 1:
-                        {
-                            if (GUI.Button(new Rect(0, 210, 405, 40), "Back"))
-                            {
-                                changeMenuState(0);
-                            }
-                            if (GUI.Button(new Rect(15, 15, 180, 180), "Training"))
-                            {
-
-                            }
-                            if (GUI.Button(new Rect(210, 15, 180, 180), "Multigiocatore \n offline"))
+                            if (GUI.Button(new Rect((Screen.width*0.35f)- Screen.width * 0.15625f, (Screen.height * 0.85f)- Screen.width * 0.15625f, Screen.width * 0.15625f, Screen.width * 0.15625f), "", SplitSel))
                             {
                                 changeMenuState(2);
                             }
                         }
                         break;
+                    case 1:
+                        {
+                            GUI.DrawTexture(new Rect(0, 0, Screen.width, Screen.height), LobbyBg);
+                            if(GUI.Button(new Rect(0,0,50,50),"Indietro"))
+                            {
+                                menuState = 0;
+                            }
+                            if (GUI.Button(new Rect(20, 355, 350, 30), "Crea la lobby") && port > 0 && port < 65535 && port != 80 && port != 53000 && port != 52999 && port != 52998 && !Username.Equals("") && Username.Length <= 16 && !Username.Contains(" "))
+                            {
+                                GameObject server = Instantiate(HostGameManager) as GameObject;
+                                server.GetComponent<ServerGameModel>().port = port.ToString();
+                                server.GetComponent<ServerGameModel>().user = Username;
+                                server.GetComponent<ServerGameModel>().updatesPerSecond = (int)Mathf.Pow(2, slidervalue - 1) * 8;
+                                server.GetComponent<NetworkManager>().server = new HostServer(port, server.GetComponent<ServerGameModel>());
+                                server.GetComponent<NetworkManager>().server.ownerData = new ClientData(Username);
+                                server.GetComponent<ServerGameView>().used = true;
+                                isMenuActive = false;
+                            }
+                            port = System.Int32.Parse(GUI.TextField(new Rect(112, 123, 250, 20), port.ToString()));
+                            Username = GUI.TextField(new Rect(112, 153, 250, 20), Username);
+                            slidervalue = (int)GUI.HorizontalSlider(new Rect(20, 229, 325, 20), slidervalue, 1, 4);
+                            if (GUI.Button(new Rect(425, 355, 350, 30), "Connettiti") && !IP.Equals("") && !port.Equals("") && port > 0 && port < 65535 && port != 80 && port != 53000 && !Username.Equals("") && Username.Length <= 16 && !Username.Contains(" "))
+                            {
+                                GameObject client = Instantiate(ClientHostGameManager) as GameObject;
+                                client.GetComponent<HostClientModel>().remoteIP = IP;
+                                client.GetComponent<HostClientModel>().port = port.ToString();
+                                client.GetComponent<HostClientModel>().username = Username;
+                                try
+                                {
+                                    client.GetComponent<ClientNManager>().client = new HostClient(IP, port);
+                                    byte[] header = new byte[2];
+                                    header[0] = 0x00;
+                                    header[1] = 0x00;
+                                    client.GetComponent<ClientNManager>().client.SendInfo(header, System.Text.Encoding.ASCII.GetBytes(PacketSize.composeString(Username)));
+                                    client.GetComponent<HostClientView>().used = true;
+                                    isMenuActive = false;
+                                }catch(System.Exception)
+                                {
+                                    message = true;
+                                    messageText = "Impossibile raggiungere l'host remoto";
+                                    Destroy(client);
+                                }
+                            }
+                            IP = GUI.TextField(new Rect(517, 123, 250, 20), IP);
+                            port = System.Int32.Parse(GUI.TextField(new Rect(517, 153, 250, 20), port.ToString()));
+                            Username = GUI.TextField(new Rect(517, 183, 250, 20), Username);
+
+                        } break;
                     case 2:
                         {
-                            GUI.DrawTexture(new Rect(0, 0, 300, 350), JoyBack, ScaleMode.ScaleToFit);
-                            if (GUI.Button(new Rect(0, 310, 300, 40), "Back"))
+                            GUI.DrawTexture(new Rect(0, 0, 800, 450), JoyBack, ScaleMode.ScaleToFit);
+                            if (GUI.Button(new Rect(0, 420, Screen.width, 30), "Torna al menù principale"))
                             {
-                                changeMenuState(1);
+                                changeMenuState(0);
                                 GetComponent<InputManager>().backReset();
                             }
-
                             if (GetComponent<InputManager>().Joys[0] != -1)
                             {
-                                GUI.DrawTexture(new Rect(126, 157, 50, 50), P1, ScaleMode.ScaleAndCrop);
+                                GUI.DrawTexture(new Rect(148, 323, 160, 4), redLed, ScaleMode.ScaleAndCrop);
                             }
                             if (GetComponent<InputManager>().Joys[1] != -1)
                             {
-                                GUI.DrawTexture(new Rect(126, 7, 50, 50), P2, ScaleMode.ScaleAndCrop);
+                                GUI.DrawTexture(new Rect(148, 123, 160, 4), redLed, ScaleMode.ScaleAndCrop);
                             }
                             if (GetComponent<InputManager>().Joys[2] != -1)
                             {
-                                GUI.DrawTexture(new Rect(99, 132, 50, 50), P3, ScaleMode.ScaleAndCrop);
+                                GUI.DrawTexture(new Rect(126, 145, 4, 160), redLed, ScaleMode.ScaleAndCrop);
                             }
                             if (GetComponent<InputManager>().Joys[3] != -1)
                             {
-                                GUI.DrawTexture(new Rect(249, 132, 50, 50), P4, ScaleMode.ScaleAndCrop);
+                                GUI.DrawTexture(new Rect(326, 145, 4, 160), redLed, ScaleMode.ScaleAndCrop);
                             }
-                            splitMode = GUI.Toggle(new Rect(0, 250, 20, 20), splitMode, "On");
                             if (GetComponent<InputManager>().isReady())
                             {
-                                if (GUI.Button(new Rect(105, 64, 90, 70), "Start"))
+                                if (GUI.Button(new Rect(215, 212, 26, 26), "" ,startButton))
                                 {
                                     instantiateSplit();
                                     menuState = 0;
@@ -408,8 +382,9 @@ public class MenuGUI : MonoBehaviour {
         }
         if (message)
         {
-            GUI.Box(new Rect(200, 112, 400, 225),messageText);
-            if (GUI.Button(new Rect(200, 312, 400, 25), "Ok"))
+            GUI.Box(new Rect(200, 112, 400, 225),messageText,bgMessage);
+            GUI.Label(new Rect(200, 112, 400, 200), messageText);
+            if (GUI.Button(new Rect(580, 112, 20, 20), "X"))
             {
                 message = false;
             }
