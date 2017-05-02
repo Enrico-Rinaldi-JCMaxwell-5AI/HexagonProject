@@ -25,4 +25,8 @@ La partita è resa interessante dalla presenza di diversi eventi che rendono uni
 *Modalità di gioco : *splitscreen si puo giocare con i  joystick da 2 fino a 4 giocatori sullo stesso computer.
                      *multi giocatore si può giocare con computer diversi connettendosi alla stessa rete locale o tramite programmi                              tunnelling (come hamachi ). Per giocare in questa modalità c'è bisogno di un giocatore come host e gli altri si                            dovranno unire alla partita tramite l'IP dell'host.Tramite le impostazioni è possibile modificare la frequenza di                          aggiornamento delle palline e navette attraverso la rete
                      
+*ENGLISH DESCRIPTION
+
+Hexagon Project is an arcade competitive game that consists in a challenge all vs all with a maximum of 4 players. Matches can be played both online and on the same computer. The goal of the game is to defend your door from the balls in the arena and try to send them in the enemies doors. The game will become harder over time.
+                     
 
