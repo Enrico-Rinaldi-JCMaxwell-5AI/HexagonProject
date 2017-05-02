@@ -20,7 +20,7 @@ La partita è resa interessante dalla presenza di diversi eventi che rendono uni
 
 *Difficoltà esponenziale : il gioco a seconda del tempo aumenta il livello di sfìda : aumentando la velocità minima delle palline (se la velocità fosse inferiore a quella minima verrà incrementata fino a raggiungere quella minima) , aumentando la frequenza degli eventi e sostituendo le bombe statiche con solo dinamiche;   
 
-*Come avviare il gioco : per utilizzare il gioco bisogna scaricare il progetto e compilarlo con Unity5(LINK UNITY) importando il progetto .
+*Come avviare il gioco : per utilizzare il gioco bisogna scaricare il progetto e compilarlo con Unity5 (https://unity3d.com/) importando il progetto .
 
 *Modalità di gioco : *splitscreen si puo giocare con i  joystick da 2 fino a 4 giocatori sullo stesso computer.
                      *multi giocatore si può giocare con computer diversi connettendosi alla stessa rete locale o tramite programmi                              tunnelling (come hamachi ). Per giocare in questa modalità c'è bisogno di un giocatore come host e gli altri si                            dovranno unire alla partita tramite l'IP dell'host.Tramite le impostazioni è possibile modificare la frequenza di                          aggiornamento delle palline e navette attraverso la rete
