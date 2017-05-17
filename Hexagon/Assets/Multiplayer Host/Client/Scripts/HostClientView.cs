@@ -18,7 +18,10 @@ public class HostClientView : MonoBehaviour {
     public GUIStyle endgameText;
     public GUIStyle homebutton;
     public bool isMenuOpen=false;
-    
+    public Texture shield;
+        public Texture2D blue;
+    public GUIStyle textStyle;
+
     // Use this for initialization
     void Start () {
         bg = GameObject.Find("Main Camera").GetComponent<MenuGUI>().bg;
@@ -28,6 +31,9 @@ public class HostClientView : MonoBehaviour {
         blueled = new Texture2D(1, 1);
         blueled.SetPixel(0, 0, new Color(0f, 0.25f, 1f, 1));
         blueled.Apply();
+        blue = new Texture2D(1, 1);
+        blue.SetPixel(0, 0, new Color(0f, 0f, 1f, 1));
+        blue.Apply();
         auxObject = (GameObject)Instantiate(auxiliaryMovement, new Vector3(0, 0, 0),Quaternion.identity);
         endgameText.normal.textColor = new Color(1, 1, 1, 1);
     }
@@ -174,7 +180,6 @@ public class HostClientView : MonoBehaviour {
                     GUI.Label(new Rect(0, Screen.height / 3f, Screen.width, Screen.height / 2), "In attesa del proprietario della lobby.", endgameText);
                     if (GUI.Button(new Rect(Screen.width / 2 - 37, Screen.height / 1.3f, 75, 75), "", homebutton))
                     {
-
                         controller.resetMap();
                         nmanager.softDisconnection();
                         GameObject.Find("Main Camera").GetComponent<MenuGUI>().isMenuActive = true;
@@ -187,15 +192,19 @@ public class HostClientView : MonoBehaviour {
                         if (GUI.Button(new Rect(Screen.width / 2 - 37, Screen.height / 2 - 37, 75, 75), "", homebutton))
                             nmanager.softDisconnection();
                     }
-                    for (int i = 0; i < 4; i++)
-                    {
-                        if (model.clientData[i] != null)
-                        {
-                            GUI.Label(new Rect(100 * i, 20, 100, 20), model.clientData[i].balls.ToString());
-                        }
-                    }
+                    GUI.Label(new Rect(Screen.width/2-85, 20, 100, 20), model.clientData[model.getMyPort()].balls.ToString(),textStyle);
+                    GUI.DrawTexture(new Rect(Screen.width /2- 55, 13, 140, 42), shield);
+                    GUI.DrawTexture(new Rect(Screen.width / 2 - 54, 24, calculatePercent(), 20), blue);
                 }
             }
         }
+    }
+
+    public int calculatePercent()
+    {
+        if (Time.time > model.clientData[model.getMyPort()].shieldtime)
+            return 100;
+        else
+            return 100 - (int)((model.clientData[model.getMyPort()].shieldtime - Time.time) * 6.66f);
     }
 }

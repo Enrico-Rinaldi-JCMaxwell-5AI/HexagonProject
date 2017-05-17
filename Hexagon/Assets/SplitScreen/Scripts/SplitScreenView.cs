@@ -34,6 +34,7 @@ public class SplitScreenView : MonoBehaviour {
     public GUIStyle optionButton;
     public GUIStyle resumeButton;
     public GUIStyle countdown;
+    public Texture shield;
 
     // Use this for initialization
     void Start () {
@@ -230,7 +231,7 @@ public class SplitScreenView : MonoBehaviour {
                             s3 = "OUT";
                         else
                             s3 = gameController.playersRemainingBalls[3].ToString();
-                        if (!mainCamera.GetComponent<MenuGUI>().splitMode)
+                        /*if (!mainCamera.GetComponent<MenuGUI>().splitMode)
                         {
                             GUI.Label(new Rect(Screen.width / 2 - 50, 20, 100, 20), visualizeTime().ToString(), textStyle);
                             GUI.Label(new Rect(Screen.width / 2 - 50, 50, 100, 20), SplitScreenModel.getMultiplier(gameController.currentTime()).ToString("F2"), textStyle);
@@ -262,67 +263,73 @@ public class SplitScreenView : MonoBehaviour {
                                 GUI.DrawTexture(new Rect(Screen.width * 0.83f - 50, 40, calculatePercent(3) / 2, 10), blue);
                             }
                         }
-                        else
-                        {
+                        else*/
                             GUI.DrawTexture(new Rect(0, Screen.height / 2 - 1, Screen.width, 2), bg);
                             if (mainCamera.GetComponent<InputManager>().numberOfPlayer() == 2)
                             {
-                                GUI.Label(new Rect(Screen.width / 2 - 50, 5, 100, 20), visualizeTime().ToString(), textStyle);
-                                GUI.Label(new Rect(Screen.width / 2 - 50, 35, 100, 20), SplitScreenModel.getMultiplier(gameController.currentTime()).ToString("F2"), textStyle);
-                                GUI.Label(new Rect(Screen.width / 2 - 50, 20, 100, 20), gameController.playersRemainingBalls[0].ToString());
-                                GUI.DrawTexture(new Rect(Screen.width / 2 - 50, 70, calculatePercent(0) / 2, 10), blue);
-                                GUI.Label(new Rect(Screen.width * 0.75f - 50, Screen.height / 2, 100, 20), gameController.playersRemainingBalls[1].ToString());
-                                GUI.DrawTexture(new Rect(Screen.width * 0.75f - 50, 70, calculatePercent(1) / 2, 10), blue);
+                                GUI.Label(new Rect(Screen.width / 2 - 22, 5, 100, 20), visualizeTime().ToString(), textStyle);
+                                GUI.Label(new Rect(Screen.width / 80, Screen.height/40, 100, 20), gameController.playersRemainingBalls[0].ToString(), textStyle);
+                            GUI.DrawTexture(new Rect(Screen.width / 80, Screen.height / 40 + 22, 140, 42), shield);
+                            GUI.DrawTexture(new Rect(Screen.width / 80, Screen.height / 1.9f +22, 140, 42), shield);
+                            GUI.DrawTexture(new Rect(Screen.width / 80+1, Screen.height / 40 + 33, calculatePercent(0), 20), blue);
+                            
+                            GUI.Label(new Rect(Screen.width /80, Screen.height / 1.9f, 100, 20), gameController.playersRemainingBalls[1].ToString(), textStyle);
+                                GUI.DrawTexture(new Rect(Screen.width /80 +1, Screen.height / 1.9f + 33, calculatePercent(1), 20), blue);
                             }
                             if (mainCamera.GetComponent<InputManager>().numberOfPlayer() == 3)
                             {
-                                GUI.Label(new Rect(Screen.width / 2 - 50, Screen.height / 2, 100, 20), visualizeTime().ToString(), textStyle);
-                                GUI.Label(new Rect(Screen.width / 2 - 50, Screen.height / 2 + 30, 100, 20), SplitScreenModel.getMultiplier(gameController.currentTime()).ToString("F2"), textStyle);
+                                GUI.Label(new Rect(Screen.width / 2 - 22, Screen.height / 2, 100, 20), visualizeTime().ToString(), textStyle);
                                 GUI.DrawTexture(new Rect(Screen.width / 2 - 1, 0, 2, Screen.height / 2), bg);
                                 if (P1)
                                 {
-                                    GUI.Label(new Rect(Screen.width / 4 - 50, 10, 100, 20), gameController.playersRemainingBalls[0].ToString());
-                                    GUI.DrawTexture(new Rect(Screen.width / 4 - 50, 40, calculatePercent(0) / 2, 10), blue);
+                                    GUI.Label(new Rect(Screen.width / 4 - 70, Screen.height / 40, 100, 20), gameController.playersRemainingBalls[0].ToString(),textStyle);
+                                GUI.DrawTexture(new Rect(Screen.width / 4-20, Screen.height / 80, 140, 42), shield);
+                                GUI.DrawTexture(new Rect(Screen.width / 4 - 19, Screen.height / 80+11, calculatePercent(0) , 20), blue);
                                 }
                                 if (P2)
                                 {
-                                    GUI.Label(new Rect(Screen.width * 0.75f - 50, 10, 100, 20), gameController.playersRemainingBalls[1].ToString());
-                                    GUI.DrawTexture(new Rect(Screen.width * 0.75f - 50, 40, calculatePercent(1) / 2, 10), blue);
+                                    GUI.Label(new Rect(Screen.width * 0.75f -70, Screen.height / 40, 100, 20), gameController.playersRemainingBalls[1].ToString(),textStyle);
+                                GUI.DrawTexture(new Rect(Screen.width *0.75f-20, Screen.height / 80, 140, 42), shield);
+                                GUI.DrawTexture(new Rect(Screen.width * 0.75f - 19, Screen.height / 80+11, calculatePercent(1) , 20), blue);
                                 }
                                 if (P3)
                                 {
-                                    GUI.Label(new Rect(Screen.width / 2 - 200, Screen.height / 2, 100, 20), gameController.playersRemainingBalls[2].ToString());
-                                    GUI.DrawTexture(new Rect(Screen.width / 2 - 200, Screen.height / 2 + 40, calculatePercent(2) / 2, 10), blue);
+                                    GUI.Label(new Rect(Screen.width / 80, Screen.height / 1.9f, 100, 20), gameController.playersRemainingBalls[2].ToString(),textStyle);
+                                GUI.DrawTexture(new Rect(Screen.width / 80, Screen.height / 1.9f + 22, 140, 42), shield);
+                                GUI.DrawTexture(new Rect(Screen.width / 80, Screen.height / 1.9f+33, calculatePercent(2), 20), blue);
                                 }
                             }
                             if (mainCamera.GetComponent<InputManager>().numberOfPlayer() == 4)
                             {
-                                GUI.Label(new Rect(Screen.width / 2 - 50, Screen.height / 2, 100, 20), visualizeTime().ToString(), textStyle);
-                                GUI.Label(new Rect(Screen.width / 2 - 50, Screen.height / 2 + 30, 100, 20), SplitScreenModel.getMultiplier(gameController.currentTime()).ToString("F2"), textStyle);
-                                GUI.DrawTexture(new Rect(Screen.width / 2 - 1, 0, 2, Screen.height), bg);
-                                if (P1)
+                            GUI.DrawTexture(new Rect(Screen.width / 2 - 1, 0, 2, Screen.height), bg);
+                            GUI.Label(new Rect(Screen.width / 2 - 22, Screen.height / 2, 100, 20), visualizeTime().ToString(), textStyle);
+                            if (P1)
                                 {
-                                    GUI.Label(new Rect(Screen.width / 4 - 50, 40, 100, 20), gameController.playersRemainingBalls[0].ToString());
-                                    GUI.DrawTexture(new Rect(Screen.width / 4 - 50, 40, calculatePercent(0) / 2, 10), blue);
-                                }
+                                GUI.Label(new Rect(Screen.width / 4 - 70, Screen.height / 40, 100, 20), gameController.playersRemainingBalls[0].ToString(), textStyle);
+                                GUI.DrawTexture(new Rect(Screen.width / 4 - 20, Screen.height / 80, 140, 42), shield);
+                                GUI.DrawTexture(new Rect(Screen.width / 4 - 19, Screen.height / 80 + 11, calculatePercent(0), 20), blue);
+                            }
                                 if (P2)
                                 {
-                                    GUI.Label(new Rect(Screen.width * 0.75f - 50, 40, 100, 20), gameController.playersRemainingBalls[1].ToString());
-                                    GUI.DrawTexture(new Rect(Screen.width * 0.75f - 50, 40, calculatePercent(1) / 2, 10), blue);
-                                }
+                                GUI.Label(new Rect(Screen.width * 0.75f - 70, Screen.height / 40, 100, 20), gameController.playersRemainingBalls[1].ToString(), textStyle);
+                                GUI.DrawTexture(new Rect(Screen.width * 0.75f - 20, Screen.height / 80, 140, 42), shield);
+                                GUI.DrawTexture(new Rect(Screen.width * 0.75f - 19, Screen.height / 80 + 11, calculatePercent(1), 20), blue);
+                            }
                                 if (P3)
                                 {
-                                    GUI.Label(new Rect(Screen.width / 4 - 50, Screen.height / 2, 100, 20), gameController.playersRemainingBalls[2].ToString());
-                                    GUI.DrawTexture(new Rect(Screen.width / 4 - 50, Screen.height / 2 + 40, calculatePercent(2) / 2, 10), blue);
+                                    GUI.Label(new Rect(Screen.width / 4 - 70, Screen.height / 1.9f, 100, 20), gameController.playersRemainingBalls[2].ToString(),textStyle);
+                                GUI.DrawTexture(new Rect(Screen.width / 4 - 20, Screen.height / 1.9f-7, 140, 42), shield);
+                                GUI.DrawTexture(new Rect(Screen.width / 4 - 19, Screen.height / 1.9f+4, calculatePercent(2), 20), blue);
                                 }
                                 if (P4)
                                 {
-                                    GUI.Label(new Rect(Screen.width * 0.75f - 50, Screen.height / 2, 100, 20), gameController.playersRemainingBalls[3].ToString());
-                                    GUI.DrawTexture(new Rect(Screen.width * 0.75f - 50, Screen.height / 2 + 40, calculatePercent(2) / 2, 10), blue);
+                                    GUI.Label(new Rect(Screen.width * 0.75f - 70, Screen.height / 1.9f, 100, 20), gameController.playersRemainingBalls[3].ToString(),textStyle);
+                                GUI.DrawTexture(new Rect(Screen.width * 0.75f - 20, Screen.height / 1.9f-7, 140, 42), shield);
+                                GUI.DrawTexture(new Rect(Screen.width * 0.75f - 19, Screen.height / 1.9f+4, calculatePercent(3), 20), blue);
                                 }
                             }
 
-                        }
+                        
                     }
                 }
                 else

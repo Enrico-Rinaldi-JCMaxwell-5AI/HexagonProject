@@ -112,6 +112,8 @@ public class HostClientController : MonoBehaviour {
         GameObject.Find("Main Camera").GetComponent<Transform>().rotation = Quaternion.Euler(22.853f, 0, 0);
         GameObject.Find("Reflection Probe").GetComponent<ReflectionProbe>().RenderProbe();
         view.auxObject.GetComponent<Transform>().position = new Vector3(0, 0, 0);
+        model.isGameFinished = false;
+        model.winner = -1;
         //DOPO TUTTE LE OPERAZIONI
         
     }

@@ -74,12 +74,6 @@ public class NetworkManager : MonoBehaviour {
 
     }
 
-    private void OnGUI()
-    {
-        if(server!=null)
-        GUI.Label(new Rect(0, 0, 100, 20), server.byteUploaded.ToString());
-    }
-
     public void readCommand()
     {
         for (int i = 0; i < server.commands.Count; i++)

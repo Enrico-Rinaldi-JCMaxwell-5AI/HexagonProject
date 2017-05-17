@@ -656,7 +656,7 @@ public class ServerGameController : MonoBehaviour {
                 shield.transform.parent = view.navs[player].transform;
                 shield.GetComponent<Transform>().position = view.navs[player].transform.position;
                 shield.GetComponent<ServerShieldScript>().endTime = model.gameTime + SplitScreenModel.shieldDuration;
-                nmanager.server.ownerData.shieldCoolDown = SplitScreenModel.shieldCooldown;
+                nmanager.server.clientSocketList.Get(player - 1).clientData.shieldCoolDown = SplitScreenModel.shieldCooldown;
                 nmanager.sendUsedAbility(player, 1);
             }
         }

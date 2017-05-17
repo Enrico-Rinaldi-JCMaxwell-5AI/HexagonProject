@@ -208,7 +208,7 @@ public class ClientNManager : MonoBehaviour {
                     GameObject shield = (GameObject)Instantiate(Shield);
                     shield.GetComponent<Transform>().position = GameObject.Find(command[2].ToString()).transform.position;
                     shield.transform.parent = GameObject.Find(command[2].ToString()).transform;
-
+                    model.clientData[command[2]].shieldtime = Time.time + 15;
                 }
                 else
                 {

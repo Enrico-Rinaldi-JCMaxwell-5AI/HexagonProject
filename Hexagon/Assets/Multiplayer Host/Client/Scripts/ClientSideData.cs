@@ -10,11 +10,13 @@ public class ClientSideData
     public bool lobbyReady;
     public int balls;
     public bool isAlive=true;
+    public float shieldtime;
 
     public ClientSideData()
     {
         lobbyReady = false;
         username = "";
+        shieldtime = 0;
     }
 }
 

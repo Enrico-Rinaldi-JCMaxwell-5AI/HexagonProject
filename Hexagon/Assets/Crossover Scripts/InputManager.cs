@@ -14,7 +14,7 @@ public class InputManager : MonoBehaviour {
 
     public int numberOfPlayer()
     {
-        int num=3;
+        int num=2;
         if (Joys[2] != -1)
         {
             num = 3;
@@ -37,7 +37,6 @@ public class InputManager : MonoBehaviour {
 
     public bool isReady()
     {
-        return true;
         if (Joys[0] != -1 && Joys[1] != -1)
             return true;
         else
