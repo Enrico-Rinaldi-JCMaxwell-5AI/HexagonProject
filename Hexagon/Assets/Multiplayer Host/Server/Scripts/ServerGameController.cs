@@ -592,15 +592,15 @@ public class ServerGameController : MonoBehaviour {
     {
         if (pos < 4 && pos > -4)
         {
-            if ((id + 1) == 1)
+            if ((id) == 1)
             {
                 view.navs[1].GetComponent<Transform>().position = new Vector3(pos, view.navs[1].transform.position.y, view.navs[1].transform.position.z);
             }
-            if ((id + 1) == 2 || (id + 1) == 3)
+            if ((id) == 2 || (id) == 3)
             {
-                view.navs[1].GetComponent<Transform>().position = new Vector3(view.navs[1].transform.position.x, view.navs[1].transform.position.y, pos);
+                view.navs[id].GetComponent<Transform>().position = new Vector3(view.navs[id].transform.position.x, view.navs[id].transform.position.y, pos);
             }
-            nmanager.sendUpdateNav(id + 1, pos);
+            nmanager.sendUpdateNav(id, pos);
         }
     }
 

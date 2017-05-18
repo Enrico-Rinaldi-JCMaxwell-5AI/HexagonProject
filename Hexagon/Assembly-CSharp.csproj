@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project ToolsVersion="3.5" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>10.0.20506</ProductVersion>
+    <ProductVersion>9.0.21022</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <RootNamespace></RootNamespace>
     <ProjectGuid>{E7AF436B-6594-29EB-35E1-7CD11A22990A}</ProjectGuid>
@@ -46,17 +46,44 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-     <Compile Include="Assets\InputManager.cs" />
+     <Compile Include="Assets\Crossover Scripts\InputManager.cs" />
+     <Compile Include="Assets\Crossover Scripts\InputPreferences.cs" />
      <Compile Include="Assets\Menu\Scripts\MenuGUI.cs" />
+     <Compile Include="Assets\Multiplayer Host\Client\Scripts\ClientNManager.cs" />
+     <Compile Include="Assets\Multiplayer Host\Client\Scripts\ClientSideData.cs" />
+     <Compile Include="Assets\Multiplayer Host\Client\Scripts\HostClient.cs" />
+     <Compile Include="Assets\Multiplayer Host\Client\Scripts\HostClientController.cs" />
+     <Compile Include="Assets\Multiplayer Host\Client\Scripts\HostClientModel.cs" />
+     <Compile Include="Assets\Multiplayer Host\Client\Scripts\HostClientRepulsion.cs" />
+     <Compile Include="Assets\Multiplayer Host\Client\Scripts\HostClientShield.cs" />
+     <Compile Include="Assets\Multiplayer Host\Client\Scripts\HostClientView.cs" />
+     <Compile Include="Assets\Multiplayer Host\PacketSize.cs" />
+     <Compile Include="Assets\Multiplayer Host\PortArray.cs" />
+     <Compile Include="Assets\Multiplayer Host\Server\Scripts\ClientData.cs" />
+     <Compile Include="Assets\Multiplayer Host\Server\Scripts\ClientSocket.cs" />
+     <Compile Include="Assets\Multiplayer Host\Server\Scripts\ExplosionSScript.cs" />
+     <Compile Include="Assets\Multiplayer Host\Server\Scripts\HostServer.cs" />
+     <Compile Include="Assets\Multiplayer Host\Server\Scripts\NetworkManager.cs" />
+     <Compile Include="Assets\Multiplayer Host\Server\Scripts\ServerBallScript.cs" />
+     <Compile Include="Assets\Multiplayer Host\Server\Scripts\ServerGameController.cs" />
+     <Compile Include="Assets\Multiplayer Host\Server\Scripts\ServerGameModel.cs" />
+     <Compile Include="Assets\Multiplayer Host\Server\Scripts\ServerGameView.cs" />
+     <Compile Include="Assets\Multiplayer Host\Server\Scripts\ServerRepulsionScript.cs" />
+     <Compile Include="Assets\Multiplayer Host\Server\Scripts\ServerShieldScript.cs" />
      <Compile Include="Assets\SplitScreen\Scripts\Abilities.cs" />
      <Compile Include="Assets\SplitScreen\Scripts\BallScript.cs" />
      <Compile Include="Assets\SplitScreen\Scripts\Bomb.cs" />
      <Compile Include="Assets\SplitScreen\Scripts\ExplosionScript.cs" />
+     <Compile Include="Assets\SplitScreen\Scripts\ExplosionSphere.cs" />
      <Compile Include="Assets\SplitScreen\Scripts\GameController.cs" />
      <Compile Include="Assets\SplitScreen\Scripts\LimitController.cs" />
      <Compile Include="Assets\SplitScreen\Scripts\NavController.cs" />
+     <Compile Include="Assets\SplitScreen\Scripts\ParticlesScript.cs" />
+     <Compile Include="Assets\SplitScreen\Scripts\RepulsionScript.cs" />
+     <Compile Include="Assets\SplitScreen\Scripts\Scoreboard.cs" />
      <Compile Include="Assets\SplitScreen\Scripts\ShieldScript.cs" />
      <Compile Include="Assets\SplitScreen\Scripts\SplitScreenModel.cs" />
+     <Compile Include="Assets\SplitScreen\Scripts\SplitScreenView.cs" />
  <Reference Include="UnityEngine.UI">
  <HintPath>C:/Program Files/Unity/Editor/Data/UnityExtensions/Unity/GUISystem/UnityEngine.UI.dll</HintPath>
  </Reference>
@@ -74,6 +101,12 @@
  </Reference>
  <Reference Include="UnityEngine.VR">
  <HintPath>C:/Program Files/Unity/Editor/Data/UnityExtensions/Unity/UnityVR/RuntimeEditor/UnityEngine.VR.dll</HintPath>
+ </Reference>
+ <Reference Include="UnityEditor.iOS.Extensions.Xcode">
+ <HintPath>C:/Program Files/Unity/Editor/Data/PlaybackEngines/iOSSupport/UnityEditor.iOS.Extensions.Xcode.dll</HintPath>
+ </Reference>
+ <Reference Include="UnityEditor.iOS.Extensions.Common">
+ <HintPath>C:/Program Files/Unity/Editor/Data/PlaybackEngines/iOSSupport/UnityEditor.iOS.Extensions.Common.dll</HintPath>
  </Reference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

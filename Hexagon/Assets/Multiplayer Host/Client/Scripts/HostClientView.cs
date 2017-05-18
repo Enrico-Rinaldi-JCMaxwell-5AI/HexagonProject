@@ -135,7 +135,7 @@ public class HostClientView : MonoBehaviour {
                     {
                         nmanager.softDisconnection();
                     }
-                    if (GUI.Button(new Rect(291, 145, 160, 18), ""))
+                    if (GUI.Button(new Rect(291, 145, 18, 160), ""))
                     {
                         nmanager.sendReady();
                     }
@@ -146,7 +146,7 @@ public class HostClientView : MonoBehaviour {
                     {
                         nmanager.softDisconnection();
                     }
-                    if (GUI.Button(new Rect(491, 201, 160, 18), ""))
+                    if (GUI.Button(new Rect(491, 145, 18, 160), ""))
                     {
                         nmanager.sendReady();
                     }

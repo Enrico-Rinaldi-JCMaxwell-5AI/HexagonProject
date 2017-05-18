@@ -93,6 +93,7 @@ public class ClientNManager : MonoBehaviour {
             if (command[0] == 0x00 && command[1] == 0x07)
             {
                 model.isGameStarted = true;
+                model.confirmedPort = command[2];
                 controller.startGame();
             }
             if (command[0] == 0x00 && command[1] == 0x08)
@@ -101,7 +102,20 @@ public class ClientNManager : MonoBehaviour {
                 float x = System.BitConverter.ToSingle(command, 4);
                 float y = System.BitConverter.ToSingle(command, 8);
                 float z = System.BitConverter.ToSingle(command, 12);
-                instantiated = (GameObject)Instantiate(model.objectPool[command[3]], new Vector3(x, y, z), Quaternion.identity);
+                Quaternion rot = Quaternion.identity;
+                if (command[2] == 0)
+                {
+                    rot = Quaternion.Euler(0, 180, 0);
+                }
+                if (command[2] == 2)
+                {
+                    rot = Quaternion.Euler(0, -90, 0);
+                }
+                if (command[2] == 3)
+                {
+                    rot = Quaternion.Euler(0, 90, 0);
+                }
+                instantiated = (GameObject)Instantiate(model.objectPool[command[3]], new Vector3(x, y, z), rot);
                 instantiated.name = ((int)command[2]).ToString();
                 controller.allInGameObject.Add(instantiated);
             }
