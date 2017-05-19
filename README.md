@@ -2,7 +2,7 @@
 
 Hexagon Project è un gioco arcade, che consiste a una battaglia tutti contro tutti nel quale bisogna proteggere la propria porta e segnare in quella degli altri, Hexagon Project è un gioco sviluppato ed ideato da Simone Brescia e Enrico Rinaldi.
 
-SCOPO DEGL GIOCO :
+SCOPO DEGL GIOCO:
 Il gioco consiste nel far entrare le palline nella porta degli avversari e allo stesso tempo proteggere la propria, dopo 60 palline entrate nella porta il giocatore viene eliminato e il gioco continua ed alza il livello di difficoltà fin quando non ne rimane soltanto uno.
 
 EVENTI IN GAME:
